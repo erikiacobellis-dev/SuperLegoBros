@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>SUPER LEGO BROS '84 — Arcade Rugby Edition</title>
+<style>
+  * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: #0b0d17; color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  #arcade-shell {
+    width: 100%; max-width: 1020px; height: 100%; max-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    padding: 6px 10px;
+  }
+  #hud-bar {
+    width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 6px; background: #161b2e; border: 3px solid #f7c948; border-radius: 6px;
+    padding: 6px 10px; box-shadow: 0 4px 0 #7a5200; font-weight: bold; font-size: 13px;
+  }
+  .hud-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hud-pill {
+    background: #0d111f; border: 2px solid #3c4a75; border-radius: 4px;
+    padding: 3px 8px; color: #ffe680; letter-spacing: 0.5px;
+  }
+  .hud-pill.warn { border-color: #ff4d4d; color: #ff8080; }
+  .hud-pill.ok { border-color: #38d973; color: #8affb2; }
+  .btn-arcade {
+    background: #273254; color: #fff; border: 2px solid #7289da; border-radius: 4px;
+    padding: 4px 8px; font-family: inherit; font-weight: bold; font-size: 12px;
+    cursor: pointer; transition: transform 0.06s, background 0.12s;
+  }
+  .btn-arcade:hover { background: #364575; }
+  .btn-arcade:active { transform: translateY(2px); }
+  .btn-arcade.active { background: #2e8b57; border-color: #7dffb3; color: #fff; }
+  .btn-arcade.gold { background: #b87b00; border-color: #ffe066; color: #fff; }
+  #canvas-wrap {
+    position: relative; width: 100%; flex: 1; min-height: 0;
+    display: flex; align-items: center; justify-content: center; margin: 6px 0;
+  }
+  canvas {
+    width: 100%; height: 100%; max-width: 960px; max-height: 540px;
+    aspect-ratio: 16 / 9; background: #5c94fc;
+    border: 4px solid #f7c948; border-radius: 6px;
+    box-shadow: 0 0 28px rgba(247, 201, 72, 0.25);
+    image-rendering: pixelated; image-rendering: crisp-edges;
+    display: block;
+  }
+  .crt-scanlines::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.22) 3px, rgba(0,0,0,0.22) 4px
+    );
+    border-radius: 6px;
+  }
+  #intro-overlay {
+    position: absolute; inset: 0; margin: auto;
+    max-width: 960px; max-height: 540px;
+    background: rgba(10, 14, 28, 0.92);
+    border: 4px solid #f7c948; border-radius: 6px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 14px; text-align: center; z-index: 10;
+  }
+  #intro-overlay.hidden { display: none; }
+  #intro-title {
+    font-size: clamp(22px, 4vw, 38px); color: #ffd43b;
+    text-shadow: 3px 3px 0 #b82900, -1px -1px 0 #1f7a3a;
+    margin: 0 0 6px; letter-spacing: 2px;
+  }
+  #intro-sub {
+    font-size: 13px; color: #a5d8ff; margin: 0 0 10px;
+  }
+  #intro-art-box {
+    position: relative; width: 240px; height: 170px;
+    border: 3px solid #38d973; border-radius: 6px; background: #18233c;
+    overflow: hidden; margin-bottom: 10px;
+    box-shadow: 0 0 18px rgba(56, 217, 115, 0.35);
+  }
+  #intro-art-canvas, #intro-custom-img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    image-rendering: pixelated;
+  }
+  #intro-custom-img { display: none; }
+  .intro-badge {
+    position: absolute; bottom: 4px; left: 4px; right: 4px;
+    background: rgba(0,0,0,0.75); color: #ffe066; font
